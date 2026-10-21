@@ -1,3 +1,41 @@
+## 0.1.0-local.3 - 2026-10-22
+
+### 首个开源预览版 · 2026-10-22
+
+Feishu MCP Server 将文档、表格、多维表格、日程、任务、会议室及附件工作流接入支持相应协议的 AI 客户端。采用 MIT 许可证，版权归属 **cyuanxv**；[Twitter / X：@cyuanxv](https://x.com/cyuanxv)。
+
+这是需要自行部署的预览版。每位使用者提供自己的飞书应用、授权、HTTPS 地址和存储；仓库不提供作者的数据、密钥、用户授权或私人生产服务入口。
+
+### 本版包含
+
+- 完整服务的单用户独立安装入口，支持飞书授权、加密保存连接及令牌续期。
+- 查询、来源回溯、多应用权限路由，以及业务写入的预览、明确确认和执行回执。
+- 电子表格创建、工作表与单元格操作，字体颜色、合并拆分和列宽；附件下载与文件夹遍历代码。
+- 安装依赖修复和启动检查；未按说明安装安全依赖时拒绝启动。
+
+### 已完成的检查
+
+- Node.js 22/24、Worker、workerd/D1/R2、Linux 独立安装、浏览器确认流程、原生 PostgreSQL、容器及依赖审计均有自动检查记录，见 [GitHub Actions](https://github.com/cyuanxv/feishu-mcp-server/actions)。
+- macOS 本地回归含 807 项 Node 测试、306 项 Worker 测试、21 项运行与存储检查；21 项原生数据库场景在独立 Linux CI 中通过，不把重复执行相加成不同功能。
+- 上一安装版本 0.1.0-local.2 已完成真实飞书授权、专用测试文档读取及续期等 12 项检查。0.1.0-local.3 增加依赖修复与启动检查；此项历史证据不等于本版所有业务操作均在真实租户验收。
+
+### 尚未完成的验收范围
+
+1. **在线文档和在线表格导出**：代码已包含，DOCX/PDF、XLSX/CSV 等流程仍需实际导出权限和真实样本的端到端验收。
+2. **群聊中直接发送的整个文件夹**：真实原生文件夹、多层嵌套及全部内容下载仍缺少完整真实样本验收，不能视为已全面打通。
+3. **新租户的全部业务操作**：并未逐项真实验收所有消息、文档、表格、任务、日程及会议室写入；仍受应用审批、用户授权和资源权限限制。
+4. **平台和部署范围**：Lark 国际版、Windows 实机、多用户、多实例及高负载公网部署尚未完成兼容性或生产认证。
+5. **AI 客户端兼容性**：已验证协议链路；不承诺任意 ChatGPT、Claude、Cursor 或其他客户端都能一键接入，须具备相应 MCP 传输和认证能力。
+
+### 安装与发布范围
+
+从源码构建独立包，按 [安装指南](https://github.com/cyuanxv/feishu-mcp-server/blob/main/standalone/README.md) 使用自己的应用和授权。必须先在自己的安装项目根设置指南中的 npm overrides，再安装生成的 tgz；包内部的 overrides 不会自动替使用者生效。
+
+**本次仅公开源码仓库与 GitHub Pre-release 说明。未发布 npm 包，未登记 MCP Registry，未开放或更改作者的现有私有服务。** GitHub 自动生成的 Source code 下载对应此标签；本次不额外上传二进制或私有验收附件。
+
+完整边界见 [发行检查](https://github.com/cyuanxv/feishu-mcp-server/blob/main/RELEASE-CHECKS.md) 与 [真实授权记录](https://github.com/cyuanxv/feishu-mcp-server/blob/main/standalone/LIVE-ACCEPTANCE.md)。
+
+
 # Changelog
 
 ## 0.1.0-dev.15

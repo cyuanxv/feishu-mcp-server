@@ -12,9 +12,11 @@ A TypeScript MCP server project that brings Feishu document search, spreadsheets
 
 [中文](README.md) · [Setup](snapshots/sites-adapter-0.1.0-sites.8/docs/SETUP.md) · [Validation](VALIDATION.md) · [Follow @cyuanxv on X](https://x.com/cyuanxv)
 
+[Preview release notes and acceptance limits](https://github.com/cyuanxv/feishu-mcp-server/releases/tag/v0.1.0-local.3)
+
 **MIT licensed · self-hosted preview · bring your own app and authorization**
 
-This is an unpublished source candidate, not a hosted service or a plug-and-play marketplace listing. Bring your own application, permissions, deployment, and compatible MCP/OAuth host.
+This is an open-source preview, not a hosted service or a plug-and-play marketplace listing. Bring your own application, permissions, deployment, and compatible MCP/OAuth host.
 
 ## What you can build
 
@@ -61,7 +63,7 @@ This project is independent of Feishu/Lark and OpenAI. It includes no original d
 
 ## Follow the build
 
-Follow [@cyuanxv on Twitter / X](https://x.com/cyuanxv) for development notes and workflow demos. Once publicly released, useful issues, contributions and stars are welcome.
+Follow [@cyuanxv on Twitter / X](https://x.com/cyuanxv) for development notes and workflow demos. Useful issues, contributions and stars are welcome.
 
 ## Local distribution preview / 本地发行预览
 

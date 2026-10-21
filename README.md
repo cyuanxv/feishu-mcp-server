@@ -14,6 +14,8 @@ Feishu MCP is a TypeScript MCP server project for Feishu workflows: documents, s
 
 [English](README.en.md) · [配置指南](snapshots/sites-adapter-0.1.0-sites.8/docs/SETUP.md) · [验证记录](VALIDATION.md) · [Twitter / X：@cyuanxv](https://x.com/cyuanxv)
 
+> [首个开源预览版说明](https://github.com/cyuanxv/feishu-mcp-server/releases/tag/v0.1.0-local.3)：包含尚未完成的真实验收范围。
+
 > **预览版 · MIT · 自托管**。使用自己的飞书应用、授权和存储；不包含作者的私人服务或数据。各项检查的日期、数量与限制见 [验证记录](VALIDATION.md)。
 
 ## 飞书自动化，从一句需求开始
@@ -106,7 +108,7 @@ npm run check:workerd
 
 自动化测试使用合成上游响应；通过测试不等于新租户的权限审批、真实业务数据或线上部署验收已完成。在线文档/表格导出仍须独立验证实际应用的导出权限与文件访问权限；真实多层群聊文件夹也须另行验收。Node 原生 PostgreSQL、浏览器交互及容器检查以各自运行记录为准。
 
-本候选包保留 `private: true` 和发布阻止脚本，避免误发到 npm。自动化流程仅检查和打包，不会部署服务或发布软件；仓库保持私有，公开须由所有者单独审核。
+本仓库以开源预览版发布。npm 包仍保留 `private: true` 和发布阻止脚本；自动化流程仅检查和打包，不会部署服务、发布 npm 或登记 MCP Registry。
 
 ## 常见问题
 
@@ -130,7 +132,7 @@ npm run check:workerd
 
 由 [@cyuanxv](https://x.com/cyuanxv) 分享开发进展、工作流演示和踩坑记录。欢迎关注 Twitter / X，告诉我你最想交给 AI 的飞书工作。
 
-如果这个项目帮到了你，未来公开后欢迎 Star、提交 Issue 或贡献代码。
+如果这个项目帮到了你，欢迎 Star、提交 Issue 或贡献代码。
 
 ## 可选合成演示
 
