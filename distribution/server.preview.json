@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.cyuanxv/feishu-mcp-preview",
+  "title": "Feishu MCP Synthetic Preview",
+  "description": "Synthetic read-only Feishu workflow preview. No live Feishu connection or production endpoint.",
+  "version": "0.1.0-preview.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@cyuanxv/feishu-mcp-preview",
+      "version": "0.1.0-preview.1",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

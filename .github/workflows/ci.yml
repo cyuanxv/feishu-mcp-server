@@ -1,0 +1,138 @@
+name: validate
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run smoke:production
+      - run: npm run check:source
+      - run: npm run test:release-policy
+  container-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t feishu-agenda-candidate .
+      - name: Refuse unconfigured container startup
+        run: |
+          set +e
+          docker run --rm -e FEISHU_PROVIDER_RUNTIME=disabled feishu-agenda-candidate
+          result=$?
+          set -e
+          test "$result" -eq 78
+      - name: Refuse unconfigured issuer container startup
+        run: |
+          set +e
+          docker run --rm -e FEISHU_AUTH_RUNTIME=disabled feishu-agenda-candidate node dist/apps/mcp-server/src/main-issuer.js
+          result=$?
+          set -e
+          test "$result" -eq 78
+      - name: Refuse unconfigured document review container startup
+        run: |
+          set +e
+          docker run --rm -e FEISHU_DOCUMENT_REVIEW_RUNTIME=disabled feishu-agenda-candidate node dist/apps/mcp-server/src/main-document-review.js
+          result=$?
+          set -e
+          test "$result" -eq 78
+      - name: Refuse unconfigured task review container startup
+        run: |
+          set +e
+          docker run --rm -e FEISHU_TASK_REVIEW_RUNTIME=disabled feishu-agenda-candidate node dist/apps/mcp-server/src/main-task-review.js
+          result=$?
+          set -e
+          test "$result" -eq 78
+  native-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_USER: synthetic_ci
+          POSTGRES_PASSWORD: synthetic_ci
+          POSTGRES_DB: feishu_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U synthetic_ci -d feishu_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx vitest run tests/issuer-native-pg.test.ts tests/document-write-native-pg.test.ts tests/document-review-native-pg.test.ts tests/task-review-native-pg.test.ts
+        env:
+          FEISHU_CI_POSTGRES: '1'
+  browser-review:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --ignore-scripts
+      - run: python -m pip install playwright==1.62.0
+      - run: python -m playwright install --with-deps chromium
+      - run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+      - run: python tests/document-review-browser.py
+      - run: python tests/task-review-browser.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: write-review-browser-evidence
+          path: browser-evidence/
+          retention-days: 7
+
+  standalone-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            snapshots/sites-adapter-0.1.0-sites.8/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm ci --ignore-scripts --prefix snapshots/sites-adapter-0.1.0-sites.8
+      - run: npx --prefix snapshots/sites-adapter-0.1.0-sites.8 tsc --noEmit -p standalone/tsconfig.json
+      - name: Build and validate standalone package
+        run: |
+          node standalone/build.mjs "$RUNNER_TEMP/feishu-standalone-stage"
+          node distribution/validate-registry.cjs "$RUNNER_TEMP/feishu-standalone-stage"
+          cd "$RUNNER_TEMP/feishu-standalone-stage"
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
+      - name: Install in a fresh directory and check real runtime with synthetic upstream
+        run: |
+          mkdir "$RUNNER_TEMP/feishu-independent-install"
+          cd "$RUNNER_TEMP/feishu-independent-install"
+          npm init -y
+          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.2.tgz"
+          cp "$GITHUB_WORKSPACE/standalone/acceptance.mjs" .
+          cp "$GITHUB_WORKSPACE/standalone/device-acceptance.mjs" .
+          node acceptance.mjs
+          node device-acceptance.mjs

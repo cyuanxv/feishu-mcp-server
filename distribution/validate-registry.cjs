@@ -1,0 +1,18 @@
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+const Ajv = require('ajv').default;
+const addFormats = require('ajv-formats');
+const schema = JSON.parse(fs.readFileSync('distribution/server.schema.json'));
+const data = JSON.parse(fs.readFileSync(process.argv[3] || 'server.json'));
+const ajv = new Ajv({ strict: false, allErrors: true }); addFormats(ajv);
+const valid = ajv.compile(schema);
+assert(valid(data), JSON.stringify(valid.errors));
+const pkg = JSON.parse(fs.readFileSync(process.argv[2] + '/package.json'));
+assert.equal(pkg.mcpName, data.name);
+assert.equal(pkg.name, data.packages[0].identifier);
+assert.equal(pkg.version, data.version);
+assert.equal(data.version, data.packages[0].version);
+assert.equal(data.packages[0].transport.type, 'stdio');
+assert.equal(pkg.private, true);
+assert(!data.remotes);
+console.log('PASS: official 2025-12-11 schema, package identity/version/mcpName and publication guards. Online namespace/package verification not attempted.');

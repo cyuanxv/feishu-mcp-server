@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+private-reference/
+*.log
+
+browser-evidence/
+
+# Local self-hosted credentials, data and build output
+standalone-stage*/
+release-stage*/
+acceptance-private-*/
+*.tgz

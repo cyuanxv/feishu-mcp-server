@@ -1,0 +1,22 @@
+{
+  "suggested_name": "feishu-mcp-server",
+  "visibility": "private",
+  "description": "飞书 MCP Server for ChatGPT：连接文档、表格、多维表格、日程、任务与会议室，支持多应用权限路由和写入预览确认。",
+  "topics": [
+    "feishu",
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "chatgpt",
+    "typescript",
+    "workflow-automation",
+    "ai-tools",
+    "calendar",
+    "spreadsheet",
+    "bitable",
+    "developer-tools"
+  ],
+  "social_preview": "docs/media/social-preview.jpg",
+  "author_url": "https://x.com/cyuanxv",
+  "status": "private-candidate"
+}

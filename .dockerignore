@@ -1,0 +1,15 @@
+**
+!package.json
+!package-lock.json
+!tsconfig.json
+!LICENSE
+!apps/
+!apps/**
+!packages/
+!packages/**
+!infra/
+!infra/migrations/
+!infra/migrations/**
+!Dockerfile
+!scripts/
+!scripts/copy-ui-assets.mjs

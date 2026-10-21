@@ -1,0 +1,1 @@
+{"extends": "../snapshots/sites-adapter-0.1.0-sites.8/tsconfig.json", "include": ["worker.ts", "capabilities.ts","device-auth.ts"]}
