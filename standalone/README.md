@@ -13,7 +13,8 @@
 ```sh
 mkdir feishu-local && cd feishu-local
 npm init -y
-npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-standalone-0.1.0-local.2.tgz
+npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
+npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-standalone-0.1.0-local.3.tgz
 ```
 
 依赖安装需要互联网；不需要编译 TypeScript、Sites 账号或 Cloudflare 账号。将以下 app.json 写在源码包之外并设置 `chmod 600 app.json`（Windows 应使用仅本人的文件 ACL）：
@@ -79,3 +80,26 @@ npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-standalone-0.1.0-
 设备码模式当前只支持主应用，不支持从页面追加其他应用的网页回调授权；需要多应用连接时使用默认 PKCE 模式并配置各应用回调。企业或应用可能限制设备授权能力，以实际飞书响应为准。无论选择哪种模式，服务自身仍需 HTTPS 和本人登录，不能将作者的私有测试地址写入客户端配置。
 
 参考：[飞书官方 CLI 的设备授权实现](https://github.com/larksuite/cli/blob/main/internal/auth/device_flow.go)。
+
+## 运行依赖修复（0.1.0-local.3）
+
+当前稳定版 Miniflare 固定了受安全公告影响的 undici / sharp 版本。安装前必须在**使用者自己的安装目录**设置上述两项 npm overrides；安装包内部的 overrides 不会向使用者生效。运行入口会检查实际解析的依赖版本，未修复时拒绝启动，不创建数据库或开放监听。
+
+经测试的替换版本为 undici 7.29.1 与 sharp 0.35.5。安装后运行 `npm audit` 核对；不要直接执行 `npm audit fix --force` 或自行降级 Miniflare。本候选版不是对未来新增漏洞的保证。
+
+0.1.0-local.2 的真实授权记录保留为历史证据；0.1.0-local.3 在相同业务源码上增加安装依赖修复与启动检查，按独立安装、存储和 CI 流程复验，不因此宣称重新完成真实飞书业务验收。
+
+## 从源码构建本地包
+
+在仓库根执行，目标目录必须尚不存在；不会发布或部署：
+
+```sh
+npm ci --ignore-scripts
+npm ci --ignore-scripts --prefix snapshots/sites-adapter-0.1.0-sites.8
+node standalone/build.mjs ../feishu-standalone-stage
+node distribution/validate-registry.cjs ../feishu-standalone-stage
+cd ../feishu-standalone-stage
+npm pack --ignore-scripts
+```
+
+随后在另一个全新目录按第 1 节设置 overrides 并安装生成的 tgz。完整发行检查见源码根 RELEASE-CHECKS.md。

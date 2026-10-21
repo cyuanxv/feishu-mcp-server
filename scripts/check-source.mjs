@@ -2,6 +2,7 @@ import { readdir, readFile, lstat } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 
 // Export only these source roots; never traverse private runtime directories.
 const roots = ['apps','packages','tests','docs','infra','scripts','.github','skills','distribution','standalone','snapshots/sites-adapter-0.1.0-sites.8'];
@@ -37,6 +38,10 @@ export async function releaseFiles(root) {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const files=await releaseFiles(resolve(import.meta.dirname,'..'));
+  if(process.argv.includes('--tracked')) {
+    const tracked=execFileSync('git',['--no-optional-locks','ls-files','-z'],{cwd:resolve(import.meta.dirname,'..'),encoding:'utf8'}).split('\0').filter(Boolean).sort();
+    if(JSON.stringify(tracked)!==JSON.stringify(files)) throw Error('Tracked files differ from the audited release allowlist.');
+  }
   if(process.argv.includes('--list')) files.forEach(name=>console.log(name));
   else console.log(`Checked ${files.length} source files including standalone and Worker; reviewed cover hash verified. Limited pattern check, not a complete security audit.`);
 }

@@ -1,9 +1,32 @@
-import { Miniflare } from 'miniflare';
+import { createRequire } from 'node:module';
+import { readFileSync, existsSync } from 'node:fs';
+import { dirname } from 'node:path';
+const runtimeRequire = createRequire(createRequire(import.meta.url).resolve('miniflare'));
+export function assertSafeRuntimeDependencies() {
+ for (const [name,minimum] of [['undici',[7,29,1]],['sharp',[0,35,5]]]) {
+  let directory=dirname(runtimeRequire.resolve(name));
+  let version;
+  for(let depth=0;depth<5;depth++) {
+   const manifest=resolve(directory,'package.json');
+   if(existsSync(manifest)) {
+    const pkg=JSON.parse(readFileSync(manifest,'utf8'));
+    if(pkg.name===name) {version=pkg.version;break;}
+   }
+   directory=dirname(directory);
+  }
+  if(typeof version!=='string') throw new Error('Cannot verify runtime dependency '+name+'.');
+  const parts=version.split('.').map(Number);
+  const valid=parts.length===3 && parts.every(Number.isInteger) && parts[0]===minimum[0] && (parts[1]>minimum[1] || (parts[1]===minimum[1] && parts[2]>=minimum[2]));
+  if(!valid) throw new Error('Unsupported runtime dependency '+name+'. Follow standalone/README.md to install the reviewed root overrides before starting.');
+ }
+}
 import { readFile, readdir, mkdir, open, unlink, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 const digest = s => createHash('sha256').update(s).digest('base64url');
 export async function startService(config, { bundle, migrations, cert, key, port = 8443, outboundService } = {}) {
+ assertSafeRuntimeDependencies();
+ const { Miniflare } = await import('miniflare');
  const data = resolve(config.dataDirectory);
  await mkdir(data, { recursive: true, mode: 0o700 });
  const dataStat = await stat(data); if (process.platform !== 'win32' && (dataStat.mode & 0o077)) throw new Error('Data directory must be private (chmod 700).');

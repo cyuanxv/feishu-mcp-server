@@ -2,5 +2,11 @@
   "dependencies": {
     "miniflare": "^4.20260730.0"
   },
-  "name": "feishu-sites-runtime-validation"
+  "name": "feishu-sites-runtime-validation",
+  "overrides": {
+    "miniflare": {
+      "undici": "7.29.1",
+      "sharp": "0.35.5"
+    }
+  }
 }

@@ -96,7 +96,7 @@ try {
  await svc.db.prepare('UPDATE connections SET expires=?').bind(Date.now()-1).run();assert.equal((await rpc('tools/call',{name:'get_agenda',arguments:args})).result.isError,false);assert.equal(calls.filter(x=>x.endsWith('/oauth/token')).length,tokenBefore+1);pass('expired user token refreshes through provider adapter');
  assert.equal((await fetchLocal('/logout',{method:'POST',headers:{Origin:origin,Cookie:ownerCookie}})).status,303);
  pass('logout clears browser cookie');
- console.log(JSON.stringify({passed:count,providerRequestsIntercepted:calls.length,realFeishuRequests:0,scope:'Installed real service with intercepted upstream; intercepted upstream only; live authorization evidence is recorded separately'}));
+ console.log(JSON.stringify({passed:count,providerRequestsIntercepted:calls.length,realFeishuRequests:0,scope:'Installed service with synthetic upstream; live authorization evidence is recorded separately'}));
 } finally {await svc?.close();}
 
 // Launch the public executable itself, not just its exported runtime.

@@ -1,10 +1,10 @@
-# GitHub 发现入口配置稿
+# GitHub 发现入口
 
-候选仓库名称已由所有者确认：`cyuanxv/feishu-mcp-server`。仓库保持私有；公开前须由所有者单独批准。
+候选仓库：[cyuanxv/feishu-mcp-server](https://github.com/cyuanxv/feishu-mcp-server)。已从干净源码建立独立提交历史，保持私有；公开前须由所有者单独批准。
 
 ## 仓库简介
 
-飞书 MCP Server for ChatGPT：连接文档、表格、多维表格、日程、任务与会议室，支持多应用权限路由和写入预览确认。
+飞书 MCP Server：使用自己的应用连接文档、表格、日程、任务与会议室；支持多应用权限路由及写入预览确认。
 
 ## Topics
 
@@ -26,3 +26,5 @@
 4. 重新打开仓库检查简介、Topics 和封面保存结果。只有用户明确同意后才改为公开。
 
 JSON 配置见 `github-metadata.json`；它是配置清单，GitHub 不会自动读取并应用。私有状态下不会获得公开发现流量，不保证搜索排名。
+
+简介和 Topics 已配置；图片已在 README 展示，GitHub Settings 的独立 Social preview 尚未上传，不将 README 图片与该设置混称已完成。

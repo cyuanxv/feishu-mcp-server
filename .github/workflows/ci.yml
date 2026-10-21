@@ -21,8 +21,9 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run smoke:production
-      - run: npm run check:source
+      - run: npm run check:source -- --tracked
       - run: npm run test:release-policy
+      - run: npm audit --audit-level=moderate
   container-build:
     runs-on: ubuntu-latest
     steps:
@@ -126,13 +127,23 @@ jobs:
           node distribution/validate-registry.cjs "$RUNNER_TEMP/feishu-standalone-stage"
           cd "$RUNNER_TEMP/feishu-standalone-stage"
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
+      - name: Refuse unpatched runtime dependencies
+        run: |
+          mkdir "$RUNNER_TEMP/feishu-unpatched-install"
+          cd "$RUNNER_TEMP/feishu-unpatched-install"
+          npm init -y
+          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.3.tgz"
+          cp "$GITHUB_WORKSPACE/standalone/dependency-acceptance.mjs" .
+          node dependency-acceptance.mjs
       - name: Install in a fresh directory and check real runtime with synthetic upstream
         run: |
           mkdir "$RUNNER_TEMP/feishu-independent-install"
           cd "$RUNNER_TEMP/feishu-independent-install"
           npm init -y
-          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.2.tgz"
+          npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
+          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.3.tgz"
           cp "$GITHUB_WORKSPACE/standalone/acceptance.mjs" .
           cp "$GITHUB_WORKSPACE/standalone/device-acceptance.mjs" .
           node acceptance.mjs
           node device-acceptance.mjs
+          npm audit --audit-level=moderate

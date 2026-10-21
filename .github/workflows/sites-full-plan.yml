@@ -1,10 +1,8 @@
 name: Sites full plan
 on:
   pull_request:
-    paths: ['snapshots/sites-adapter-0.1.0-sites.8/**', '.github/workflows/sites-full-plan.yml']
   push:
     branches: [main]
-    paths: ['snapshots/sites-adapter-0.1.0-sites.8/**', '.github/workflows/sites-full-plan.yml']
 permissions:
   contents: read
 jobs:
@@ -27,3 +25,5 @@ jobs:
       - run: npm run check:package
       - run: npm ci --ignore-scripts --prefix runtime-check
       - run: npm run check:workerd
+      - run: npm audit --audit-level=moderate
+      - run: npm audit --audit-level=moderate --prefix runtime-check
