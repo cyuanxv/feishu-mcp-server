@@ -20,5 +20,13 @@
   "social_preview": "docs/media/social-preview.jpg",
   "author_url": "https://x.com/cyuanxv",
   "status": "public-preview",
-  "repository_url": "https://github.com/cyuanxv/feishu-mcp-server"
+  "repository_url": "https://github.com/cyuanxv/feishu-mcp-server",
+  "social_preview_configured": true,
+  "synthetic_demo": {
+    "gif": "docs/media/workflow-demo.gif",
+    "mp4": "docs/media/workflow-demo.mp4",
+    "duration_seconds": 32,
+    "real_feishu_calls": 0,
+    "product_recording": false
+  }
 }

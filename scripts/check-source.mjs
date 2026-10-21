@@ -8,8 +8,8 @@ import { execFileSync } from 'node:child_process';
 const roots = ['apps','packages','tests','docs','infra','scripts','.github','skills','distribution','standalone','snapshots/sites-adapter-0.1.0-sites.8'];
 const top = ['package.json','package-lock.json','tsconfig.json','README.md','README.en.md','VALIDATION.md','RELEASE-CHECKS.md','LICENSE','SECURITY.md','CONTRIBUTING.md','CHANGELOG.md','.env.example','.gitignore','Dockerfile','.dockerignore','server.json'];
 const generated = new Set(['node_modules','dist','coverage','.test-build','.runtime-test','.sites-runtime','__pycache__']);
-// This one reviewed concept cover is allowed by exact path AND content hash.
-const reviewedAssets = new Map([['docs/media/social-preview.jpg','2e0d8e5a4ca80bd746fd754ec04266b3fd80b12b01c98abeddf120e83ee269ac']]);
+// Reviewed public artwork and synthetic demos require exact paths AND content hashes.
+const reviewedAssets = new Map([["docs/media/social-preview.jpg", "2e0d8e5a4ca80bd746fd754ec04266b3fd80b12b01c98abeddf120e83ee269ac"], ["docs/media/workflow-demo.gif", "82bbd43ab6265885fb9ab244763e9f1497928b2d734feb429c42917de55bf7bc"], ["docs/media/workflow-demo.mp4", "a9c676632bd4f598fa60f161bc2b5dca6d2b185c8d132dc217eca4066f0591fd"]]);
 export function validateReleaseFile(name, content) {
   if (/(^|\/)(?:private-reference|\.git|\.env(?:\..*)?|acceptance-private-[^/]*)(?:\/|$)/.test(name) && name !== '.env.example') throw Error('Excluded source path: '+name);
   if (/\.(?:orig|rej|patch|pending|bak|pem|p12|key|sqlite|db|tgz|zip|docx|pdf)$/i.test(name)) throw Error('Unreviewed private or generated file: '+name);

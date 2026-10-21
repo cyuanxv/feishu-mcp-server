@@ -18,3 +18,12 @@ test('private files and secrets remain rejected',()=>{
  assert.throws(()=>validateReleaseFile('docs/binary.txt',Buffer.from([0,1,2])));
  assert.doesNotThrow(()=>validateReleaseFile('.env.example',Buffer.from('FEISHU_APP_ID=YOUR_APP_ID')));
 });
+
+test('synthetic video and GIF require the reviewed bytes',async()=>{
+ for(const name of ['workflow-demo.gif','workflow-demo.mp4']) {
+  const data=await readFile(new URL('../docs/media/'+name,import.meta.url));
+  assert.doesNotThrow(()=>validateReleaseFile('docs/media/'+name,data));
+  assert.throws(()=>validateReleaseFile('docs/media/unknown-'+name,data));
+  assert.throws(()=>validateReleaseFile('docs/media/'+name,Buffer.concat([data,Buffer.from('changed')])));
+ }
+});

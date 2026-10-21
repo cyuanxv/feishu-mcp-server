@@ -18,6 +18,14 @@ A TypeScript MCP server project that brings Feishu document search, spreadsheets
 
 This is an open-source preview, not a hosted service or a plug-and-play marketplace listing. Bring your own application, permissions, deployment, and compatible MCP/OAuth host.
 
+## A 32-second workflow illustration
+
+**Synthetic data, not a product recording.** Request → review the target and content → explicit confirmation → simulated receipt and readback. This Chinese-language animation does not connect to Feishu or perform real writes; it is not acceptance evidence.
+
+![Synthetic spreadsheet write workflow; not a product recording](docs/media/workflow-demo.gif)
+
+[Watch / download MP4](docs/media/workflow-demo.mp4) · [Install with your own app](standalone/README.md) · [Verified scope and remaining limits](RELEASE-CHECKS.md)
+
 ## What you can build
 
 - Find authorized messages, documents and knowledge-base content with traceable sources.

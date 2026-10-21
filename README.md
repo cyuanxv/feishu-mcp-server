@@ -18,6 +18,14 @@ Feishu MCP is a TypeScript MCP server project for Feishu workflows: documents, s
 
 > **预览版 · MIT · 自托管**。使用自己的飞书应用、授权和存储；不包含作者的私人服务或数据。各项检查的日期、数量与限制见 [验证记录](VALIDATION.md)。
 
+## 32 秒看懂：写入前先确认
+
+**合成数据 · 流程示意，非产品录屏。** 提出需求 → 预览目标与内容 → 明确确认 → 模拟回执与回读核对。演示没有连接飞书，也没有执行真实写入，不能作为功能验收证据。
+
+![32 秒合成表格写入流程示意，非产品录屏](docs/media/workflow-demo.gif)
+
+[观看 / 下载完整 MP4](docs/media/workflow-demo.mp4) · [使用自己的应用开始安装](standalone/README.md) · [已验证与待验收范围](RELEASE-CHECKS.md)
+
 ## 飞书自动化，从一句需求开始
 
 以下是可围绕现有工具构建的工作流示例，不是对任意 AI 客户端的一键兼容承诺。

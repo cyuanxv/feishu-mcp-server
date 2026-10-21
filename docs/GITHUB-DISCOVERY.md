@@ -27,4 +27,4 @@
 
 JSON 配置见 `github-metadata.json`；它是配置清单，GitHub 不会自动读取并应用。仓库公开后可参与公开发现，但不保证搜索排名。
 
-简介和 Topics 已配置；图片已在 README 展示，GitHub Settings 的独立 Social preview 尚未上传，不将 README 图片与该设置混称已完成。
+简介和 Topics 已配置；已在 GitHub Settings → General → Social preview 上传封面，并通过重新加载设置页确认保存。中英文 README 同时提供 32 秒合成流程动图及 MP4，明确标注非产品录屏。
