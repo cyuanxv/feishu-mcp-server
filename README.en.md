@@ -2,6 +2,8 @@
 
 Copyright © 2026 cyuanxv · [Twitter / X: @cyuanxv](https://x.com/cyuanxv) · MIT License
 
+**Published preview: `0.1.0-local.3`** · [npm package](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [Official MCP Registry entry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+
 **Self-hosted live-service package:** see [installation and your own Feishu OAuth](standalone/README.md). Root `server.json` describes this package; the synthetic preview draft is under `distribution/server.preview.json`.
 
 ![Feishu MCP — Connect AI to Feishu workflows](docs/media/social-preview.jpg)
@@ -49,6 +51,19 @@ flowchart LR
 ```
 
 ## Get started
+
+Install the full self-hosted service with Node.js 22+ (24 recommended). The dependency overrides must be set in your own installation project before installing:
+
+```sh
+mkdir feishu-local && cd feishu-local
+npm init -y
+npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
+```
+
+Continue with the [installation and authorization guide](standalone/README.md): configure your own Feishu app, trusted HTTPS origin and authorization before connecting an MCP client. The Registry entry describes this same package, not a public hosted endpoint. Initialization cannot be skipped. Source builds retain publication guards, and CI does not publish or deploy automatically.
+
+### Source checks
 
 Use Node.js 24 LTS. From the repository root:
 
