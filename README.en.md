@@ -6,6 +6,8 @@ Copyright © 2026 cyuanxv · [Twitter / X: @cyuanxv](https://x.com/cyuanxv) · M
 
 **Self-hosted live-service package:** see [installation and your own Feishu OAuth](standalone/README.md). Root `server.json` describes this package; the synthetic preview draft is under `distribution/server.preview.json`.
 
+**First-time setup?** Follow the [step-by-step Chinese installation tutorial](docs/INSTALL.zh-CN.md) for app setup, HTTPS, authorization and a first read.
+
 ![Feishu MCP — Connect AI to Feishu workflows](docs/media/social-preview.jpg)
 
 **Give your AI a workspace worth working in.**
