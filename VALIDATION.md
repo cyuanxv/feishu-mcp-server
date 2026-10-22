@@ -1,8 +1,8 @@
 # 预览版验证记录
 
-日期：2026-10-22。此版本作为开源预览版发布；未向 npm 或 MCP Registry 发布。
+日期：2026-10-22。独立安装预览版 `0.1.0-local.3` 已在 [npm](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) 发布并完成 [MCP Registry 登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)。
 
-当前独立安装候选版本：0.1.0-local.3。0.1.0-local.2 的真实授权证据作为历史范围单独保留。
+当前独立安装预览版本：0.1.0-local.3。0.1.0-local.2 的真实授权证据作为历史范围单独保留。
 
 ## 当前代码的本地检查
 
@@ -30,4 +30,4 @@ Node.js 24.19.0，macOS。源码、依赖和测试运行目录与原私有服务
 - 在线文档/表格导出、真实多层群聊文件夹仍需相应权限与样本验收。
 - Lark 国际版、多用户、多实例和大规模公网部署未认证。
 - GitHub Linux 安装检查与 macOS 安装记录分开；Windows 未实机验证。
-- 有限模式扫描不是对未知漏洞的安全认证。后续软件包发布或公开服务部署须所有者单独批准。
+- 有限模式扫描不是对未知漏洞的安全认证。本次上架不代表新增真实业务验收；后续版本发布或公开服务部署仍须所有者授权。

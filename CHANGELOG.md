@@ -1,3 +1,9 @@
+## 发布入口同步 - 2026-10-22
+
+- `0.1.0-local.3` 完整服务预览版已在 [npm](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) 发布，完成 [MCP Registry 登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)。
+- 中文/英文首页和安装指南已补充公开安装命令、依赖修复与自托管边界；公开下载、全新安装及 15 项回验通过，具体范围见 [发行检查](RELEASE-CHECKS.md)。
+- 无业务代码或私有服务变更；下方保留首次 GitHub 预览版发布时的历史说明。
+
 ## 0.1.0-local.3 - 2026-10-22
 
 ### 首个开源预览版 · 2026-10-22
@@ -31,7 +37,7 @@ Feishu MCP Server 将文档、表格、多维表格、日程、任务、会议�
 
 从源码构建独立包，按 [安装指南](https://github.com/cyuanxv/feishu-mcp-server/blob/main/standalone/README.md) 使用自己的应用和授权。必须先在自己的安装项目根设置指南中的 npm overrides，再安装生成的 tgz；包内部的 overrides 不会自动替使用者生效。
 
-**本次仅公开源码仓库与 GitHub Pre-release 说明。未发布 npm 包，未登记 MCP Registry，未开放或更改作者的现有私有服务。** GitHub 自动生成的 Source code 下载对应此标签；本次不额外上传二进制或私有验收附件。
+**首次 GitHub 预览版发布时仅公开源码与 Pre-release 说明；npm 与 Registry 已在后续步骤完成，见本页顶部。未开放或更改作者的现有私有服务。** GitHub 自动生成的 Source code 下载对应此标签；本次不额外上传二进制或私有验收附件。
 
 完整边界见 [发行检查](https://github.com/cyuanxv/feishu-mcp-server/blob/main/RELEASE-CHECKS.md) 与 [真实授权记录](https://github.com/cyuanxv/feishu-mcp-server/blob/main/standalone/LIVE-ACCEPTANCE.md)。
 

@@ -1,10 +1,14 @@
-# Feishu MCP 独立安装版（本地审阅）
+# Feishu MCP 独立安装版（开源预览版）
 
 版权所有 © 2026 cyuanxv · [Twitter / X：@cyuanxv](https://x.com/cyuanxv) · MIT 许可证
 
 这是完整 Worker 功能的单用户自托管入口，直接调用飞书 API，不是合成数据演示。包含独立登录、飞书 OAuth、多应用连接和权限路由、查询、写入预览确认、附件与持久化存储。实际可用功能取决于自己的应用权限、用户授权、资源访问范围及原有功能限制。不是飞书官方服务。
 
 运行时用 workerd/Miniflare 在本机执行 Worker，D1/R2 数据分别保存在自己的数据目录中。适用于个人独立部署预览，未进行多人、多实例或公网大规模生产认证。Windows/Linux/macOS 的具体兼容性以 Miniflare/workerd 支持的平台为准；本轮验收 macOS、Node.js 24。
+
+**公开版本：`0.1.0-local.3`（预览版）** · [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+
+Registry 标识为 `io.github.cyuanxv/feishu-mcp-standalone`，对应本安装包；其中 `--config` 应填写自己初始化的私有配置文件绝对路径。它不提供作者的私人服务入口。
 
 ## 1. 安装
 
@@ -14,7 +18,7 @@
 mkdir feishu-local && cd feishu-local
 npm init -y
 npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
-npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-standalone-0.1.0-local.3.tgz
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
 ```
 
 依赖安装需要互联网；不需要编译 TypeScript、Sites 账号或 Cloudflare 账号。将以下 app.json 写在源码包之外并设置 `chmod 600 app.json`（Windows 应使用仅本人的文件 ACL）：
@@ -69,7 +73,7 @@ npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-standalone-0.1.0-
 
 ## 发布状态
 
-仅本地审阅，`private: true` 与 prepublishOnly 阻止误发布。Registry 配置是草稿，无私人服务地址；名称和所有权未在线验证。本版已完成独立私有环境的真实授权与专用测试文档只读验收，详见源码包中的 LIVE-ACCEPTANCE.md；公开发布仍须所有者另行批准。
+这是公开自托管预览版，使用 npm 的 preview 标签。必须先按安装章节设置依赖修复；不支持跳过初始化、HTTPS、用户授权而直接运行。Registry 仅登记安装包，不提供作者的私人服务、凭据或数据。真实业务验收范围仍受本文所述限制。
 
 ## 官方设备码授权（无需修改应用回调）
 

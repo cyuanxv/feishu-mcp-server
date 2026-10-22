@@ -2,6 +2,8 @@
 
 版权所有 © 2026 cyuanxv · [Twitter / X：@cyuanxv](https://x.com/cyuanxv) · MIT 许可证
 
+**已发布：`0.1.0-local.3`（预览版）** · [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+
 **真实服务独立安装版：** 请先看 [安装与自己的飞书授权](standalone/README.md)。根目录 `server.json` 对应此版本；旧合成预览配置在 `distribution/server.preview.json`。
 
 ![Feishu MCP：给你的 AI，一整套飞书工作能力](docs/media/social-preview.jpg)
@@ -86,6 +88,19 @@ flowchart LR
 - **本机合成演示与早期 Node 实现**：根目录 `apps/`、`packages/`。默认演示仅监听本机，不是生产认证服务。
 - **通用 Agent 工作流说明**：`skills/feishu-workflows/`，不含既有插件绑定。
 
+## 从 npm 安装完整服务
+
+建议使用 Node.js 24，支持 Node.js 22+。先创建自己的安装目录并设置依赖修复，再安装已发布的预览版：
+
+```sh
+mkdir feishu-local && cd feishu-local
+npm init -y
+npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
+```
+
+接着按 [完整安装与授权指南](standalone/README.md) 配置自己的飞书应用、HTTPS 地址和授权，再连接 MCP 客户端。Registry 登记的是同一个自托管安装包，不提供公共托管入口；不能跳过初始化直接运行。安装后的全新目录回验和原有验收边界见 [发行检查](RELEASE-CHECKS.md)。
+
 ## 本地检查
 
 建议使用 Node.js 24 LTS、npm。安装命令只安装锁定依赖；不需要飞书账号或密钥。
@@ -116,7 +131,7 @@ npm run check:workerd
 
 自动化测试使用合成上游响应；通过测试不等于新租户的权限审批、真实业务数据或线上部署验收已完成。在线文档/表格导出仍须独立验证实际应用的导出权限与文件访问权限；真实多层群聊文件夹也须另行验收。Node 原生 PostgreSQL、浏览器交互及容器检查以各自运行记录为准。
 
-本仓库以开源预览版发布。npm 包仍保留 `private: true` 和发布阻止脚本；自动化流程仅检查和打包，不会部署服务、发布 npm 或登记 MCP Registry。
+完整服务安装包已在 npm 发布，并在 MCP Registry 登记，版本为 `0.1.0-local.3`。源码构建仍默认保留误发布保护；CI 只检查和打包，不会自动更新 npm、Registry 或部署服务。
 
 ## 常见问题
 
@@ -126,7 +141,7 @@ npm run check:workerd
 
 ### 能直接在 ChatGPT 里安装使用吗？
 
-本包是源码，不是托管服务或已审核的目录插件。需自行部署、注册应用并授权，再在支持相应 MCP/OAuth 能力的客户端接入；具体宿主仍需验收。
+本项目提供源码与 npm 自托管安装包，不提供托管服务或已审核的 ChatGPT 目录插件。需自行部署、注册应用并授权，再在支持相应 MCP/OAuth 能力的客户端接入；具体宿主仍需验收。
 
 ### 支持 Lark 国际版吗？
 

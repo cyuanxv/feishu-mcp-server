@@ -24,10 +24,10 @@ npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-preview-0.1.0-pre
 
 完整源码包保留独立服务与云端适配器及其配置说明。它们需要使用者部署自己的身份验证、存储和飞书授权，并单独进行真实业务验收；不会由本命令自动启用。本包不是完整云端插件的一键替代品。
 
-## Registry 状态
+## 本合成演示包的状态
 
-`server.json` 是符合官方 schema 的待发布配置，标识为 `io.github.cyuanxv/feishu-mcp-preview`。包名为拟定名称，未验证 npm 所有权或可用性，尚未发布、未登记。`private: true` 与 `prepublishOnly` 双重阻止误发布。无 `remotes` 配置，无生产地址。
+本目录仅保留本地合成演示，标识为 `io.github.cyuanxv/feishu-mcp-preview`，没有发布该演示包。`private: true` 与 `prepublishOnly` 保留误发布保护，无私人服务地址。
 
-公开前仍需：用户批准 → 确认包名及账户权限 → 审核并解除发布保护 → 公共 npm 包发布 → GitHub 命名空间身份验证 → Registry 提交与在线回读。本地 schema 检查不代表 Registry 已接受。
+**已经公开的是完整服务独立安装版**：[npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)，包名为 `@cyuanxv/feishu-mcp-standalone`，版本 `0.1.0-local.3`。需要真实飞书功能时，请使用 [独立安装指南](../standalone/README.md)，不要将本目录的合成配置当作已发布服务。
 
 作者：[Twitter / X @cyuanxv](https://x.com/cyuanxv)。MIT。
