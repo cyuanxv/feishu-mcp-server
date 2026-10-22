@@ -6,6 +6,8 @@
 
 **真实服务独立安装版：** 请先看 [安装与自己的飞书授权](standalone/README.md)。根目录 `server.json` 对应此版本；旧合成预览配置在 `distribution/server.preview.json`。
 
+**第一次安装？** 从[中文安装教程：应用、HTTPS、授权与首次读取](docs/INSTALL.zh-CN.md)开始。
+
 ![Feishu MCP：给你的 AI，一整套飞书工作能力](docs/media/social-preview.jpg)
 
 **给你的 AI，一整套飞书工作能力。**
