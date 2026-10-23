@@ -28,6 +28,6 @@ npm install --ignore-scripts /absolute/path/cyuanxv-feishu-mcp-preview-0.1.0-pre
 
 本目录仅保留本地合成演示，标识为 `io.github.cyuanxv/feishu-mcp-preview`，没有发布该演示包。`private: true` 与 `prepublishOnly` 保留误发布保护，无私人服务地址。
 
-**已经公开的是完整服务独立安装版**：[npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)，包名为 `@cyuanxv/feishu-mcp-standalone`，版本 `0.1.0-local.3`。需要真实飞书功能时，请使用 [独立安装指南](../standalone/README.md)，不要将本目录的合成配置当作已发布服务。
+**已经公开的是完整服务独立安装版**：[npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.4)，包名为 `@cyuanxv/feishu-mcp-standalone`，版本 `0.1.0-local.4`。需要真实飞书功能时，请使用 [独立安装指南](../standalone/README.md)，不要将本目录的合成配置当作已发布服务。
 
 作者：[Twitter / X @cyuanxv](https://x.com/cyuanxv)。MIT。

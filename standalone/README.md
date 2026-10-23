@@ -6,7 +6,7 @@
 
 运行时用 workerd/Miniflare 在本机执行 Worker，D1/R2 数据分别保存在自己的数据目录中。适用于个人独立部署预览，未进行多人、多实例或公网大规模生产认证。Windows/Linux/macOS 的具体兼容性以 Miniflare/workerd 支持的平台为准；本轮验收 macOS、Node.js 24。
 
-**公开版本：`0.1.0-local.3`（预览版）** · [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+**公开版本：`0.1.0-local.4`（预览版）** · [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.4)
 
 Registry 标识为 `io.github.cyuanxv/feishu-mcp-standalone`，对应本安装包；其中 `--config` 应填写自己初始化的私有配置文件绝对路径。它不提供作者的私人服务入口。
 
@@ -18,7 +18,7 @@ Registry 标识为 `io.github.cyuanxv/feishu-mcp-standalone`，对应本安装�
 mkdir feishu-local && cd feishu-local
 npm init -y
 npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
-npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.4
 ```
 
 依赖安装需要互联网；不需要编译 TypeScript、Sites 账号或 Cloudflare 账号。将以下 app.json 写在源码包之外并设置 `chmod 600 app.json`（Windows 应使用仅本人的文件 ACL）：

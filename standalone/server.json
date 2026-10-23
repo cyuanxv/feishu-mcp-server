@@ -3,13 +3,13 @@
   "name": "io.github.cyuanxv/feishu-mcp-standalone",
   "title": "Feishu MCP Self-hosted",
   "description": "Single-owner Feishu MCP: run your own service, configure your app, authorize your Feishu account.",
-  "version": "0.1.0-local.3",
+  "version": "0.1.0-local.4",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@cyuanxv/feishu-mcp-standalone",
-      "version": "0.1.0-local.3",
+      "version": "0.1.0-local.4",
       "transport": {
         "type": "stdio"
       },

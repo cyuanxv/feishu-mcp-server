@@ -132,7 +132,7 @@ jobs:
           mkdir "$RUNNER_TEMP/feishu-unpatched-install"
           cd "$RUNNER_TEMP/feishu-unpatched-install"
           npm init -y
-          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.3.tgz"
+          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.4.tgz"
           cp "$GITHUB_WORKSPACE/standalone/dependency-acceptance.mjs" .
           node dependency-acceptance.mjs
       - name: Install in a fresh directory and check real runtime with synthetic upstream
@@ -141,7 +141,7 @@ jobs:
           cd "$RUNNER_TEMP/feishu-independent-install"
           npm init -y
           npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
-          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.3.tgz"
+          npm install --ignore-scripts "$RUNNER_TEMP/cyuanxv-feishu-mcp-standalone-0.1.0-local.4.tgz"
           cp "$GITHUB_WORKSPACE/standalone/acceptance.mjs" .
           cp "$GITHUB_WORKSPACE/standalone/device-acceptance.mjs" .
           node acceptance.mjs

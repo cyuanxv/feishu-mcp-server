@@ -6,7 +6,7 @@
 
 这篇教程先完成一个小目标：**在自己部署的服务中，让支持 MCP 的 AI 客户端读取一份自己创建的测试文档。** 表格写入放到最后单独开启。
 
-当前针对 `0.1.0-local.3` 预览版。它需要配置 HTTPS、应用权限和用户授权，安装 npm 包只是第一步。本文整理自当前安装文档和代码，本轮没有重新操作飞书进行验收；不同客户端与企业权限策略可能有所不同。
+当前针对 `0.1.0-local.4` 预览版。它需要配置 HTTPS、应用权限和用户授权，安装 npm 包只是第一步。本文整理自当前安装文档和代码，本轮没有重新操作飞书进行验收；不同客户端与企业权限策略可能有所不同。
 
 ## 先看 32 秒示意演示
 
@@ -41,7 +41,7 @@ mkdir "$HOME/feishu-local"
 cd "$HOME/feishu-local"
 npm init -y
 npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
-npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.4
 npm audit
 ```
 
@@ -201,13 +201,13 @@ https://localhost:8443/api/feishu/callback
 
 ## 版本与验收范围
 
-这是单用户自部署预览版，不是飞书官方服务。当前记录包含独立安装和协议检查，以及历史版本专用测试文档的真实授权、读取与续期验收；这些证据不能扩大为所有业务、客户端和系统的认证。在线文档导出、多层群聊文件夹下载等仍保留实际验收限制。
+这是单用户自部署预览版，不是飞书官方服务。当前记录包含独立安装和协议检查，以及历史版本专用测试文档的真实授权、读取与续期验收；这些证据不能扩大为所有业务、客户端和系统的认证。在线文档导出仍待真实权限验收。原生文件夹原名与空目录已在本人专用样本验证，本包有独立安装回归；不同群权限仍以实际授权为准。
 
 - [项目源码与首页](https://github.com/cyuanxv/feishu-mcp-server)
 - [当前安装文档](https://github.com/cyuanxv/feishu-mcp-server/blob/main/standalone/README.md)
 - [发行检查与限制](https://github.com/cyuanxv/feishu-mcp-server/blob/main/RELEASE-CHECKS.md)
 - [真实授权历史记录](https://github.com/cyuanxv/feishu-mcp-server/blob/main/standalone/LIVE-ACCEPTANCE.md)
 - [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone)
-- [MCP Registry 登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+- [MCP Registry 登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.4)
 
 版权所有 © 2026 cyuanxv · [Twitter / X：@cyuanxv](https://x.com/cyuanxv) · 项目使用 MIT 许可证
