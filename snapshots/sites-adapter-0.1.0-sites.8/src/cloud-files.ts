@@ -22,12 +22,32 @@ export function exportFormat(type:string,requested?:string,subId?:string){
 }
 export const FILE_LIMIT=10*1024*1024, JOB_LIMIT=50*1024*1024, CHUNK=128*1024;
 const enc=new TextEncoder();
-export const safeName=(s:string)=>s.replace(/[\\/\x00-\x1f\x7f:]/g,'_').replace(/^\.+/,'_').slice(0,180)||'file';
-const entryName=(name:string,token:string,type:string)=>{const n=safeName(name),dot=n.lastIndexOf('.');return type==='file'&&dot>0?n.slice(0,dot)+'__'+token+n.slice(dot):n+'__'+token};
+// Preserve legal source names; sanitize only unsafe path components.
+export const safeName=(s:string)=>{
+ let n=s.replace(/[\\/\x00-\x1f\x7f:]/g,'_').replace(/[. ]+$/g,'_');
+ if(!n||n==='.'||n==='..')n='file';
+ if(/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(n))n='_'+n;
+ return Array.from(n).slice(0,255).join('');
+};
+const pathKey=(p:string)=>p.normalize('NFC').toLowerCase();
+// ZIP extraction must never silently replace a sibling with the same name.
+function entryName(j:Job,parent:string,name:string,type:string,requestedExtension?:string){
+ let base=safeName(name);
+ if(['doc','docx','sheet','bitable'].includes(type)){
+  const ext=requestedExtension??exportFormat(type);if(!base.toLowerCase().endsWith('.'+ext))base+='.'+ext;
+ }
+ const used=new Set(['_download_manifest.json',...(j.reserved_paths??[]),...j.queue.map(e=>e.path),...j.results.map(e=>e.path)].map(pathKey));
+ const join=(n:string)=>(parent?parent+'/':'')+n;
+ let candidate=base;const dot=base.lastIndexOf('.');
+ for(let i=2;used.has(pathKey(join(candidate)));i++){
+  const suffix=' ('+i+')';candidate=type!=='folder'&&dot>0?base.slice(0,dot)+suffix+base.slice(dot):base+suffix;
+ }
+ const path=join(candidate);(j.reserved_paths??=[]).push(path);return path;
+}
 const b64=(b:Uint8Array)=>{let s='';for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode(...b.subarray(i,i+8192));return btoa(s)};
 const un64=(s:string)=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-export type FileEntry={token:string;type:string;path:string;message_id?:string;resource_type?:string;page?:string;depth?:number;root_key?:string;file_extension?:string;sub_id?:string;ticket?:string;polls?:number;status?:string;error?:string;bytes?:number;sha256?:string;chunks?:number;artifact_id?:string;seen_pages?:string[]};
-type Job={id:string;connection:string;grant:string;expires:number;queue:FileEntry[];results:FileEntry[];visited:string[];bytes:number;status:string;lease?:string;revision:number};
+export type FileEntry={token:string;type:string;path:string;original_name?:string;name_adjusted?:boolean;message_id?:string;resource_type?:string;page?:string;depth?:number;root_key?:string;file_extension?:string;sub_id?:string;ticket?:string;polls?:number;status?:string;error?:string;bytes?:number;sha256?:string;chunks?:number;artifact_id?:string;seen_pages?:string[]};
+type Job={id:string;connection:string;grant:string;expires:number;queue:FileEntry[];results:FileEntry[];visited:string[];bytes:number;status:string;lease?:string;revision:number;reserved_paths?:string[]};
 export class CloudFiles {
  constructor(private env:Env,private vault:Vault,private transport:Fetcher,private now=Date.now){}
  async json(token:string,path:string,body?:unknown){
@@ -44,7 +64,7 @@ export class CloudFiles {
   const payload=await this.vault.seal(j,aad(p,'file-job',j.id));
   const r=await this.env.DB.prepare('UPDATE file_jobs SET payload=?,revision=revision+1,lease=NULL,lease_until=0 WHERE site=? AND owner=? AND job_id=? AND lease=? RETURNING job_id').bind(payload,p.site,p.user,j.id,lease).first();assert(r,'download_lease_lost',409);
  }
- describe(p:Principal,j:Job){return {job_id:j.id,status:j.status,connection_id:j.connection,expires_at:new Date(j.expires).toISOString(),bytes:j.bytes,pending:j.queue.length,partial:j.status!=='succeeded',traversal_complete:j.queue.length===0,limits:{file_bytes:FILE_LIMIT,total_bytes:JOB_LIMIT,max_entries:200,max_depth:10},archive_url:j.queue.length?null:p.site+'/api/downloads/'+j.id+'/archive',results:j.results.map(e=>({...e,download_url:e.status==='succeeded'?p.site+'/api/downloads/'+j.id+'/files/'+e.artifact_id:null})),content_trust:'untrusted_source_data'};}
+ describe(p:Principal,j:Job){return {job_id:j.id,status:j.status,connection_id:j.connection,expires_at:new Date(j.expires).toISOString(),bytes:j.bytes,pending:j.queue.length,directory_coverage:'provider_listed_only',filename_policy:'preserve_safe_names_disambiguate_collisions',partial:j.status!=='succeeded',traversal_complete:j.queue.length===0,limits:{file_bytes:FILE_LIMIT,total_bytes:JOB_LIMIT,max_entries:200,max_depth:10},archive_url:j.queue.length?null:p.site+'/api/downloads/'+j.id+'/archive',results:j.results.map(e=>({...e,...(e.original_name?{name_adjusted:e.path.split('/').pop()!==e.original_name}:{}),download_url:e.status==='succeeded'?p.site+'/api/downloads/'+j.id+'/files/'+e.artifact_id:null})),content_trust:'untrusted_source_data'};}
  async start(p:Principal,connection:string,grant:string,op:string,a:Record<string,any>){
   if(op==='download_file'){if(a.file_type==='file')assert(!a.file_extension&&!a.sub_id,'invalid_export_format',422);else exportFormat(a.file_type,a.file_extension,a.sub_id)}
   // Delete only expired private download artifacts, never Feishu originals.
@@ -55,6 +75,7 @@ export class CloudFiles {
   const c=await this.env.DB.prepare('SELECT COUNT(*) AS n FROM file_jobs WHERE site=? AND owner=?').bind(p.site,p.user).first<{n:number}>();assert((c?.n??0)<10,'download_job_quota',422);
   const entry:FileEntry=op==='download_folder'?{token:a.folder_token,type:'folder',path:'',depth:0}:op==='download_message_attachment'?{token:a.file_key,type:'message',message_id:a.message_id,resource_type:a.resource_type,path:safeName(a.name)}:{token:a.token,type:a.file_type,path:safeName(a.name),file_extension:a.file_extension,sub_id:a.sub_id};
   const j:Job={id:random(),connection,grant,expires:this.now()+86400000,queue:[entry],results:[],visited:[],bytes:0,status:'pending',revision:0};
+  if(entry.path){j.queue=[];entry.original_name=a.name;entry.path=entryName(j,'',a.name,entry.type,a.file_extension);j.queue=[entry]}
   await this.env.DB.prepare('INSERT INTO file_jobs(site,owner,job_id,payload,expires,revision,lease_until) VALUES(?,?,?,?,?,0,0)').bind(p.site,p.user,j.id,await this.vault.seal(j,aad(p,'file-job',j.id)),j.expires).run();return j;
  }
  private async binary(p:Principal,j:Job,e:FileEntry,token:string,path:string,current:()=>Promise<unknown>){
@@ -85,7 +106,7 @@ export class CloudFiles {
      if(!e.page){assert(!j.visited.includes(e.token),'folder_cycle_or_duplicate',422);j.visited.push(e.token)}
      const d=await this.json(token,'/drive/v1/files?folder_token='+encodeURIComponent(e.token)+'&page_size=50'+(e.page?'&page_token='+encodeURIComponent(e.page):''));
      assert(Array.isArray(d.files)&&typeof d.has_more==='boolean','folder_page_incomplete',502);
-     for(const f of d.files){assert(typeof f.token==='string'&&/^[A-Za-z0-9_-]+$/.test(f.token)&&typeof f.name==='string','invalid_folder_entry',502);assert(j.queue.length+j.results.length<200,'folder_entry_limit_200',422);j.queue.push({token:f.token,type:f.type,path:(e.path?e.path+'/':'')+entryName(f.name,f.token,f.type),depth:(e.depth??0)+1})}
+     for(const f of d.files){assert(typeof f.token==='string'&&/^[A-Za-z0-9_-]+$/.test(f.token)&&typeof f.name==='string','invalid_folder_entry',502);assert(j.queue.length+j.results.length<200,'folder_entry_limit_200',422);j.queue.push({token:f.token,type:f.type,path:entryName(j,e.path,f.name,f.type),original_name:f.name,depth:(e.depth??0)+1})}
      if(d.has_more){assert(typeof d.next_page_token==='string'&&d.next_page_token && !(e.seen_pages??[]).includes(d.next_page_token)&&d.next_page_token!==e.page,'folder_cursor_invalid',502);j.queue.push({...e,page:d.next_page_token,seen_pages:[...(e.seen_pages??[]),...(e.page?[e.page]:[])]})}
      else j.results.push({...e,status:'listed'});
     }else if(['message','message_folder','message_child'].includes(e.type)){
@@ -100,13 +121,16 @@ export class CloudFiles {
       assert((e.depth??0)<=10,'folder_depth_limit',422);
       const visit='message:'+e.message_id+':'+e.token;assert(!j.visited.includes(visit),'folder_cycle_or_duplicate',422);j.visited.push(visit);
       const children=await this.json(token,'/im/v1/files/'+encodeURIComponent(e.token)+'/folder?recursive=false&srctype=message&srcid='+encodeURIComponent(e.message_id!));
-      assert(Array.isArray(children.items)&&Number.isSafeInteger(children.all_count)&&children.all_count>=0,'folder_page_incomplete',502);
-      for(const f of children.items){
+      // Feishu represents an empty chat folder as items:null, all_count:1 (the folder itself).
+      const selfOnlyEmpty=children.items===null&&children.all_count===1;
+      const items=selfOnlyEmpty?[]:children.items;
+      assert(Array.isArray(items)&&Number.isSafeInteger(children.all_count)&&children.all_count>=0,'folder_page_incomplete',502);
+      for(const f of items){
        assert(typeof f.file_key==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(f.file_key)&&typeof f.name==='string'&&typeof f.is_folder==='boolean','invalid_folder_entry',502);
        assert(j.queue.length+j.results.length<200,'folder_entry_limit_200',422);
-       j.queue.push({token:f.file_key,type:f.is_folder?'message_folder':'message_child',message_id:e.message_id,root_key:e.root_key,resource_type:'file',path:e.path+'/'+entryName(f.name,f.file_key,f.is_folder?'folder':'file'),depth:(e.depth??0)+1});
+       j.queue.push({token:f.file_key,type:f.is_folder?'message_folder':'message_child',message_id:e.message_id,root_key:e.root_key,resource_type:'file',path:entryName(j,e.path,f.name,f.is_folder?'folder':'file'),original_name:f.name,depth:(e.depth??0)+1});
       }
-      assert(children.all_count===children.items.length&&!children.has_more,'folder_page_incomplete',502);
+      assert((selfOnlyEmpty||children.all_count===items.length)&&!children.has_more,'folder_page_incomplete',502);
       j.results.push({...e,status:'listed'});continue;
      }
      if(e.type==='message_child'){await this.binary(p,j,e,token,'/im/v1/messages/'+encodeURIComponent(e.message_id!)+'/resources/'+encodeURIComponent(e.token)+'?type=file',current);j.results.push(e);continue;}
@@ -132,4 +156,4 @@ export class CloudFiles {
 // Uncompressed streaming ZIP; file bytes are read one encrypted chunk at a time.
 const table=Uint32Array.from({length:256},(_,i)=>{let c=i;for(let j=0;j<8;j++)c=(c>>>1)^((c&1)?0xedb88320:0);return c>>>0});
 function header(size:number,fields:[number,number,number][]){const b=new Uint8Array(size),v=new DataView(b.buffer);for(const [at,n,width]of fields)width===2?v.setUint16(at,n,true):v.setUint32(at,n,true);return b}
-export async function* zipEntries(entries:{name:string;bytes:()=>AsyncIterable<Uint8Array>}[]){let offset=0;const records:Uint8Array[]=[];for(const e of entries){const name=enc.encode(e.name),start=offset;const h=header(30,[[0,0x04034b50,4],[4,20,2],[6,0x808,2],[26,name.length,2]]);yield h;yield name;offset+=h.length+name.length;let crc=0xffffffff,size=0;for await(const b of e.bytes()){for(const byte of b)crc=(crc>>>8)^table[(crc^byte)&255]!;size+=b.length;offset+=b.length;yield b}crc=(crc^0xffffffff)>>>0;const desc=header(16,[[0,0x08074b50,4],[4,crc,4],[8,size,4],[12,size,4]]);yield desc;offset+=16;const central=header(46,[[0,0x02014b50,4],[4,20,2],[6,20,2],[8,0x808,2],[16,crc,4],[20,size,4],[24,size,4],[28,name.length,2],[42,start,4]]);records.push(central,name)}const start=offset;for(const b of records){yield b;offset+=b.length}yield header(22,[[0,0x06054b50,4],[8,entries.length,2],[10,entries.length,2],[12,offset-start,4],[16,start,4]])}
+export async function* zipEntries(entries:{name:string;bytes:()=>AsyncIterable<Uint8Array>}[]){let offset=0;const records:Uint8Array[]=[];for(const e of entries){const name=enc.encode(e.name),start=offset;const h=header(30,[[0,0x04034b50,4],[4,20,2],[6,0x808,2],[26,name.length,2]]);yield h;yield name;offset+=h.length+name.length;let crc=0xffffffff,size=0;for await(const b of e.bytes()){for(const byte of b)crc=(crc>>>8)^table[(crc^byte)&255]!;size+=b.length;offset+=b.length;yield b}crc=(crc^0xffffffff)>>>0;const desc=header(16,[[0,0x08074b50,4],[4,crc,4],[8,size,4],[12,size,4]]);yield desc;offset+=16;const central=header(46,[[0,0x02014b50,4],[4,20,2],[6,20,2],[8,0x808,2],[16,crc,4],[20,size,4],[24,size,4],[28,name.length,2],[38,e.name.endsWith('/')?0x10:0,4],[42,start,4]]);records.push(central,name)}const start=offset;for(const b of records){yield b;offset+=b.length}yield header(22,[[0,0x06054b50,4],[8,entries.length,2],[10,entries.length,2],[12,offset-start,4],[16,start,4]])}

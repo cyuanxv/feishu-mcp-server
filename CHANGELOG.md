@@ -1,3 +1,17 @@
+## 0.1.0-local.4 - 2026-10-23
+
+### 修复
+
+- 下载文件和目录保持安全的原始名称；同名、大小写和 Unicode 规范化冲突自动编号，避免解压覆盖。
+- ZIP 明确保留飞书返回的空目录；兼容真实接口的 `items: null, all_count: 1` 空目录响应。来源没有返回的目录不会凭空补造。
+- 保留路径清理、私有加密下载、所有者隔离和授权检查；历史下载任务路径不变。
+
+### 验证与边界
+
+- 增加合成上游的原名、重名冲突、三级空目录及不完整响应回归，并通过实际安装包执行云端下载和 ZIP 内容检查。
+- 同一适配器修复已在所有者私有环境用专用样本通过真实下载；本次公开发行验证不读取私人资料，也不部署现有私有服务。
+- 在线文档与表格导出的权限审批仍未完成，不属于本次修复的已验收能力。
+
 ## 发布入口同步 - 2026-10-22
 
 - `0.1.0-local.3` 完整服务预览版已在 [npm](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) 发布，完成 [MCP Registry 登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)。

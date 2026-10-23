@@ -2,7 +2,7 @@
 
 Copyright © 2026 cyuanxv · [Twitter / X: @cyuanxv](https://x.com/cyuanxv) · MIT License
 
-**Published preview: `0.1.0-local.3`** · [npm package](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [Official MCP Registry entry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+**Published preview: `0.1.0-local.4`** · [npm package](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [Official MCP Registry entry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.4)
 
 **Self-hosted live-service package:** see [installation and your own Feishu OAuth](standalone/README.md). Root `server.json` describes this package; the synthetic preview draft is under `distribution/server.preview.json`.
 
@@ -16,7 +16,7 @@ A TypeScript MCP server project that brings Feishu document search, spreadsheets
 
 [中文](README.md) · [Setup](snapshots/sites-adapter-0.1.0-sites.8/docs/SETUP.md) · [Validation](VALIDATION.md) · [Follow @cyuanxv on X](https://x.com/cyuanxv)
 
-[Preview release notes and acceptance limits](https://github.com/cyuanxv/feishu-mcp-server/releases/tag/v0.1.0-local.3)
+[Preview release notes and acceptance limits](https://github.com/cyuanxv/feishu-mcp-server/releases/tag/v0.1.0-local.4)
 
 **MIT licensed · self-hosted preview · bring your own app and authorization**
 
@@ -60,7 +60,7 @@ Install the full self-hosted service with Node.js 22+ (24 recommended). The depe
 mkdir feishu-local && cd feishu-local
 npm init -y
 npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
-npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.4
 ```
 
 Continue with the [installation and authorization guide](standalone/README.md): configure your own Feishu app, trusted HTTPS origin and authorization before connecting an MCP client. The Registry entry describes this same package, not a public hosted endpoint. Initialization cannot be skipped. Source builds retain publication guards, and CI does not publish or deploy automatically.
@@ -82,7 +82,7 @@ The root runtime is an early Node/PostgreSQL implementation with a loopback-only
 
 ## Evidence and limits
 
-Local regression, installation tests and real authorization are recorded separately. Real authorization, refresh and reading one dedicated test document passed in an isolated private environment; this does not validate every business operation. Online document exports and real nested chat-folder cases still require separate acceptance. Lark international compatibility has not been verified. See [validation details](VALIDATION.md).
+Local regression, installation tests and real authorization are recorded separately. Real authorization, refresh and reading one dedicated test document passed in an isolated private environment; this does not validate every business operation. Online exports still require real permission acceptance. Native folder names and empty directories passed dedicated owner-only samples; this package adds synthetic-upstream installation regression, not certification for every chat permission scenario. Lark international compatibility has not been verified. See [validation details](VALIDATION.md).
 
 This project is independent of Feishu/Lark and OpenAI. It includes no original deployment credentials, private service binding or old Git history.
 

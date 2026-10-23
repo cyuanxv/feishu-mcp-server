@@ -2,7 +2,7 @@
 
 版权所有 © 2026 cyuanxv · [Twitter / X：@cyuanxv](https://x.com/cyuanxv) · MIT 许可证
 
-**已发布：`0.1.0-local.3`（预览版）** · [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.3)
+**已发布：`0.1.0-local.4`（预览版）** · [npm 安装包](https://www.npmjs.com/package/@cyuanxv/feishu-mcp-standalone) · [MCP Registry 官方登记](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.cyuanxv%2Ffeishu-mcp-standalone/versions/0.1.0-local.4)
 
 **真实服务独立安装版：** 请先看 [安装与自己的飞书授权](standalone/README.md)。根目录 `server.json` 对应此版本；旧合成预览配置在 `distribution/server.preview.json`。
 
@@ -18,7 +18,7 @@ Feishu MCP is a TypeScript MCP server project for Feishu workflows: documents, s
 
 [English](README.en.md) · [配置指南](snapshots/sites-adapter-0.1.0-sites.8/docs/SETUP.md) · [验证记录](VALIDATION.md) · [Twitter / X：@cyuanxv](https://x.com/cyuanxv)
 
-> [首个开源预览版说明](https://github.com/cyuanxv/feishu-mcp-server/releases/tag/v0.1.0-local.3)：包含尚未完成的真实验收范围。
+> [当前预览版说明](https://github.com/cyuanxv/feishu-mcp-server/releases/tag/v0.1.0-local.4)：包含尚未完成的真实验收范围。
 
 > **预览版 · MIT · 自托管**。使用自己的飞书应用、授权和存储；不包含作者的私人服务或数据。各项检查的日期、数量与限制见 [验证记录](VALIDATION.md)。
 
@@ -98,7 +98,7 @@ flowchart LR
 mkdir feishu-local && cd feishu-local
 npm init -y
 npm pkg set overrides.miniflare.undici=7.29.1 overrides.miniflare.sharp=0.35.5
-npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.3
+npm install --ignore-scripts @cyuanxv/feishu-mcp-standalone@0.1.0-local.4
 ```
 
 接着按 [完整安装与授权指南](standalone/README.md) 配置自己的飞书应用、HTTPS 地址和授权，再连接 MCP 客户端。Registry 登记的是同一个自托管安装包，不提供公共托管入口；不能跳过初始化直接运行。安装后的全新目录回验和原有验收边界见 [发行检查](RELEASE-CHECKS.md)。
@@ -131,9 +131,9 @@ npm run check:workerd
 
 ## 验证边界
 
-自动化测试使用合成上游响应；通过测试不等于新租户的权限审批、真实业务数据或线上部署验收已完成。在线文档/表格导出仍须独立验证实际应用的导出权限与文件访问权限；真实多层群聊文件夹也须另行验收。Node 原生 PostgreSQL、浏览器交互及容器检查以各自运行记录为准。
+自动化测试使用合成上游响应；通过测试不等于新租户的权限审批、真实业务数据或线上部署验收已完成。在线文档/表格导出仍须独立验证实际应用的导出权限与文件访问权限；原生文件夹已在所有者本人会话专用样本完成真实下载；本发行包通过合成上游独立安装回归，不能扩大为所有群聊权限场景均通过。Node 原生 PostgreSQL、浏览器交互及容器检查以各自运行记录为准。
 
-完整服务安装包已在 npm 发布，并在 MCP Registry 登记，版本为 `0.1.0-local.3`。源码构建仍默认保留误发布保护；CI 只检查和打包，不会自动更新 npm、Registry 或部署服务。
+完整服务安装包已在 npm 发布，并在 MCP Registry 登记，版本为 `0.1.0-local.4`。源码构建仍默认保留误发布保护；CI 只检查和打包，不会自动更新 npm、Registry 或部署服务。
 
 ## 常见问题
 
@@ -151,7 +151,7 @@ npm run check:workerd
 
 ### 在线文档导出和群聊文件夹下载都已完全验证了吗？
 
-下载和在线导出代码已经包含；在线 DOCX/PDF、XLSX/CSV 导出仍有真实授权与数据验收边界，真实多层群聊文件夹也待补验收。请以配置指南和验证记录为准。
+下载和在线导出代码已经包含；在线 DOCX/PDF、XLSX/CSV 导出仍有真实授权与数据验收边界，原生文件夹的原名与三级空目录已通过专用样本验证；不同群聊的访问权限仍需使用者核实。请以配置指南和验证记录为准。
 
 ## 跟进项目
 
